@@ -1,16 +1,22 @@
+<style lang="scss" scoped>
+    .error-message {
+        color: red;
+    }
+</style>
 <template>
     <div>
-        <div v-show="errorMsg">
+        <div class="error-message" v-show="errorMsg">
             {{ errorMsg }}
         </div>
         <div>
-            <input type="text" v-model="form.username">
+            <input type="text" v-model="form.username" placeholder="用户名">
         </div>
         <div>
-            <input type="password" v-model="form.password">
+            <input type="password" v-model="form.password" placeholder="密码">
         </div>
         <div>
-            <button @click="login">Login</button>
+            <button v-show="!loading" @click="login">Login</button>
+            <span v-show="loading">登录中...</span>
         </div>
     </div>
 </template>
@@ -26,7 +32,8 @@ export default {
                 username: '',
                 password: ''
             },
-            errorMsg: ''
+            errorMsg: '',
+            loading: false
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -40,7 +47,15 @@ export default {
     },
     methods: {
         login() {
+            if (this.form.username == '' || this.form.password == '') {
+                this.errorMsg = '请正确填写登录表单'
+                return
+            }
+
+            this.loading = true
             authService.login(this.form, ({ code, msg }) => {
+                this.loading = false
+
                 if (code === 20000) {
                     this.errorMsg = ''
                     const toPath = this.$route.query.redirect || this.fromPath
