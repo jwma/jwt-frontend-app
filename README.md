@@ -1,6 +1,6 @@
-# vwu-gaming-admin-app
+# Vue-JWT
 
-> 为伍GamingSystem后台
+> Vue + VueRouter + Axios实现一套 JWT 用户身份验证的前端应用
 
 ## Build Setup
 
@@ -15,4 +15,7 @@ npm run dev
 npm run build
 ```
 
-For detailed explanation on how things work, consult the [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## 后台
+需要搭配后台程序一起使用，[项目地址][1]
+
+[1]: https://github.com/jwma/symfony-jwt
