@@ -2,16 +2,14 @@
 
 > Vue + VueRouter + Axios实现一套 JWT 用户身份验证的前端应用
 
-## Build Setup
+## 构建
 
 ``` bash
-# install dependencies
 npm install
 
-# serve with hot reload at localhost:8080
+# 先跑后台程序，目前 webpack-dev-server 代理了后端接口，写死的8080
 npm run dev
 
-# build for production with minification
 npm run build
 ```
 
