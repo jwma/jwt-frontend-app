@@ -47,7 +47,8 @@ Axios.interceptors.response.use(response => {
   const code = response.data.code
 
   if (code === 40317) {
-    authService.logout()
+    authService.eraseToken()
+    
     router.replace({
       path: '/login',
       query: { redirect: router.currentRoute.fullPath }

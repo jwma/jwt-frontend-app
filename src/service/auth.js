@@ -2,6 +2,7 @@ import Vue from 'vue'
 const qs = require('qs')
 
 const LOGIN_API_URL = '/admin/api/security/login'
+const LOGOUT_API_URL = '/admin/api/security/logout'
 const GET_USER_INFO_API = '/admin/api/security/get-user-info'
 const JWTKey = 'admin-jwt'
 
@@ -27,10 +28,22 @@ export default {
             })
     },
     logout(successCallback) {
+        Vue.prototype.$http.post(LOGOUT_API_URL)
+            .then(response => {
+                this.eraseToken()
+
+                typeof successCallback === 'function' && successCallback()
+            })
+    },
+    eraseToken() {
         this.data.jwt = false
         window.localStorage.removeItem(JWTKey)
-
-        typeof successCallback === 'function' && successCallback()
+    },
+    userInfo(successCallback) {
+        Vue.prototype.$http.get(GET_USER_INFO_API)
+            .then(response => {
+                typeof successCallback === 'function' && successCallback(response.data)
+            })
     },
     isAuth() {
         if (this.data.jwt) {
@@ -57,11 +70,5 @@ export default {
     refreshToken(token) {
         window.localStorage.setItem(JWTKey, token)
         this.data.jwt = token
-    },
-    userInfo(successCallback) {
-        Vue.prototype.$http.get(GET_USER_INFO_API)
-            .then(response => {
-                typeof successCallback === 'function' && successCallback(response.data)
-            })
     }
 }
