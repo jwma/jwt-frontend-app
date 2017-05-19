@@ -3,7 +3,8 @@ const qs = require('qs')
 
 const LOGIN_API_URL = '/admin/api/security/login'
 const LOGOUT_API_URL = '/admin/api/security/logout'
-const GET_USER_INFO_API = '/admin/api/security/get-user-info'
+const GET_USER_INFO_API_URL = '/admin/api/security/get-user-info'
+const CHECK_STATUS_API_URL = '/admin/api/security/check-status'
 const JWTKey = 'admin-jwt'
 
 export default {
@@ -40,7 +41,13 @@ export default {
         window.localStorage.removeItem(JWTKey)
     },
     userInfo(successCallback) {
-        Vue.prototype.$http.get(GET_USER_INFO_API)
+        Vue.prototype.$http.get(GET_USER_INFO_API_URL)
+            .then(response => {
+                typeof successCallback === 'function' && successCallback(response.data)
+            })
+    },
+    checkStatus(successCallback) {
+        Vue.prototype.$http.post(CHECK_STATUS_API_URL)
             .then(response => {
                 typeof successCallback === 'function' && successCallback(response.data)
             })

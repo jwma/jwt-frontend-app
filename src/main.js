@@ -35,7 +35,7 @@ router.beforeEach((to, from, next) => {
 
 // 如果已经验证过用户身份，则请求头加入 Authorization 字段
 Axios.interceptors.request.use(config => {
-  if (authService.isAuth) {
+  if (authService.isAuth()) {
     config.headers['Authorization'] = authService.getToken()
   }
 
@@ -67,6 +67,9 @@ Axios.interceptors.response.use(response => {
   }
   return response
 })
+
+// 首次加载是检查授权状态
+authService.checkStatus()
 
 new Vue({
   el: '#app',
