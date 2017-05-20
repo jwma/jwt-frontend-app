@@ -46,7 +46,7 @@ Axios.interceptors.request.use(config => {
 Axios.interceptors.response.use(response => {
   const code = response.data.code
 
-  if (code === 40317) {
+  if (code === 40100) {
     authService.eraseToken()
     
     router.replace({
