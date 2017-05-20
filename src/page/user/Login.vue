@@ -1,13 +1,14 @@
 <style lang="scss" scoped>
-    .error-message {
-        color: red;
-    }
+.error-message {
+    color: red;
+}
 </style>
 <template>
     <div>
         <div class="error-message" v-show="errorMsg">
             {{ errorMsg }}
         </div>
+        <div v-show="expiredTips == 1">登录身份已过期，请重新登录</div>
         <div>
             <input type="text" v-model="form.username" placeholder="用户名">
         </div>
@@ -33,7 +34,8 @@ export default {
                 password: ''
             },
             errorMsg: '',
-            loading: false
+            loading: false,
+            expiredTips: 0
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -44,6 +46,9 @@ export default {
                 vm.fromPath = from.path
             })
         }
+    },
+    created() {
+        this.expiredTips = this.$route.query.expiredTips || 0
     },
     methods: {
         login() {
@@ -58,7 +63,9 @@ export default {
 
                 if (code === 20000) {
                     this.errorMsg = ''
-                    const toPath = this.$route.query.redirect || this.fromPath
+                    const redirect = this.$route.query.redirect == '/login' ? '/' : this.$route.query.redirect
+                    const toPath = redirect || this.fromPath
+
                     this.$router.push({ path: toPath })
                 } else {
                     this.errorMsg = msg

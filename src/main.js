@@ -48,13 +48,18 @@ Axios.interceptors.response.use(response => {
 
   if (code === 40100) {
     authService.eraseToken()
-    
-    router.replace({
-      path: '/login',
-      query: { redirect: router.currentRoute.fullPath }
-    })
-    
-    return Promise.reject(response.data)
+
+    // 如果当前路由不是登录页面路由且检查的状态是授权过期状态，则路由强制跳转至登录页面且显示登录过期提示
+    if (router.currentRoute.path !== '/login') {
+      router.replace({
+        path: '/login',
+        query: { redirect: router.currentRoute.fullPath, expiredTips: 1 }
+      })
+
+      return Promise.reject(response.data)
+    }
+
+    return response
   } else {
     return response
   }
