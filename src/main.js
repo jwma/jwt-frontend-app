@@ -2,21 +2,12 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Axios from 'axios'
 import authService from './service/auth'
+import routes from './router/router'
+import App from './App.vue'
 
 // 启用各个组件
 Vue.prototype.$http = Axios
 Vue.use(VueRouter)
-
-import App from './App.vue'
-import Login from './page/user/Login.vue'
-import Dashboard from './page/dashboard/Index.vue'
-import Dashboard2 from './page/dashboard/Index2.vue'
-
-const routes = [
-  { path: '/', component: Dashboard, meta: { requiresAuth: true } },
-  { path: '/2', component: Dashboard2, meta: { requiresAuth: true } },
-  { path: '/login', component: Login },
-]
 
 const router = new VueRouter({ routes })
 
