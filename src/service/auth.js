@@ -29,7 +29,7 @@ export default {
         })
     },
     eraseToken() {
-        this.data.jwt = false
+        this.data.jwt = null
         window.localStorage.removeItem(JWTKey)
     },
     userInfo(successCallback) {

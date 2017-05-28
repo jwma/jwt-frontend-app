@@ -1,3 +1,6 @@
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 export const LOGIN_FAILURE = 'LOGIN_FAILURE'
 export const LOGOUT = 'LOGOUT'
+export const SET_JWT = 'SET_JWT'
+export const REFRESH_JWT = 'REFRESH_JWT'
+export const ERASE_TOKEN = 'ERASE_TOKEN'

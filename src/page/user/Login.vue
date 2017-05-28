@@ -22,7 +22,7 @@
     </div>
 </template>
 <script>
-import authService from '../../service/auth.js'
+import { mapGetters } from 'vuex'
 
 export default {
     name: 'Login',
@@ -38,17 +38,18 @@ export default {
             errorMsg: ''
         }
     },
-    beforeRouteEnter(to, from, next) {
-        if (authService.isAuth()) {
-            next({ path: from.path })
-        } else {
-            next(vm => {
-                vm.fromPath = from.path
-            })
-        }
+    computed: {
+        ...mapGetters([
+            'isAuthored'
+        ])
     },
     created() {
         this.expiredTips = this.$route.query.expiredTips || 0
+
+        if (this.isAuthored) {
+            console.log('已授权，跳转...')
+            this.$router.replace({ path: '/' })
+        }
     },
     methods: {
         login() {

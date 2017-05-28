@@ -1,6 +1,7 @@
 <template>
     <div>
         <router-link to="/">To dashboard 1</router-link>
+        <router-link to="/login">To Login</router-link>
         <button @click="getUserInfo">Get user information</button>
         <button @click="logout">Logout</button>
         <hr>

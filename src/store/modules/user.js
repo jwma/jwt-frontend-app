@@ -1,14 +1,22 @@
 import authAPI from '../../api/auth.js'
+import { JWT_KEY } from '../../constants'
 import * as types from '../mutation-types'
-
-const JWTKey = 'admin-jwt'
 
 const state = {
     jwt: null
 }
 
 const getters = {
-    jwt: state => state.jwt
+    jwt: state => {
+        if (state.jwt) {
+            return state.jwt
+        }
+
+        return window.localStorage.getItem(JWT_KEY)
+    },
+    isAuthored: (state, getters) => {
+        return !!getters.jwt
+    }
 }
 
 const actions = {
@@ -19,7 +27,10 @@ const actions = {
                 const { code, msg } = response.data
 
                 if (code === 20000) {
-                    commit(types.LOGIN_SUCCESS, response.data)
+                    const { token } = response.data
+                    commit(types.LOGIN_SUCCESS)
+                    commit(types.SET_JWT, token)
+
                     resolve(code)
                 } else {
                     commit(types.LOGIN_FAILURE, msg)
@@ -30,16 +41,39 @@ const actions = {
                 reject({ msg: 'error' })
             })
         })
-    }
+    },
+    checkStatus({ commit, state }) {
+
+        return new Promise((resolve, reject) => {
+            authAPI.checkStatus(response => {
+                resolve(response)
+            })
+        })
+
+    },
 }
 
 const mutations = {
-    [types.LOGIN_SUCCESS](state, { token }) {
+    [types.LOGIN_SUCCESS](state) {
+    },
+    [types.SET_JWT](state, token) {
         state.jwt = token
-        window.localStorage.setItem(JWTKey, token)
+        if (token != null) {
+            window.localStorage.setItem(JWT_KEY, token)
+        }
     },
     [types.LOGIN_FAILURE](state, msg) {
 
+    },
+    [types.ERASE_TOKEN](state) {
+        state.jwt = null
+        window.localStorage.removeItem(JWT_KEY)
+    },
+    [types.REFRESH_JWT](state, token) {
+        state.jwt = token
+        if (token != null) {
+            window.localStorage.setItem(JWT_KEY, token)
+        }
     }
 }
 
