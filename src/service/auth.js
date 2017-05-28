@@ -1,56 +1,46 @@
 import Vue from 'vue'
-const qs = require('qs')
+import authAPI from '../api/auth.js'
 
-const LOGIN_API_URL = '/admin/api/security/login'
-const LOGOUT_API_URL = '/admin/api/security/logout'
-const GET_USER_INFO_API_URL = '/admin/api/security/get-user-info'
-const CHECK_STATUS_API_URL = '/admin/api/security/check-status'
 const JWTKey = 'admin-jwt'
 
 export default {
     data: {
         jwt: null
     },
-    login(loginFormData, successCallback, failureCallback) {
-        Vue.prototype.$http.post(LOGIN_API_URL, qs.stringify(loginFormData))
-            .then(response => {
-                const { code, msg } = response.data
+    login(formData, successCallback, failureCallback) {
+        authAPI.login(formData, response => {
+            const { code, msg } = response.data
 
-                if (code === 20000) {
-                    const token = response.data.token
-                    window.localStorage.setItem(JWTKey, token)
-                    this.data.jwt = token
-                }
+            if (code === 20000) {
+                const token = response.data.token
+                window.localStorage.setItem(JWTKey, token)
+                this.data.jwt = token
+            }
 
-                typeof successCallback === 'function' && successCallback(response.data)
-            })
-            .catch(error => {
-                typeof failureCallback === 'function' && failureCallback(error)
-            })
+            typeof successCallback === 'function' && successCallback(response.data)
+        }, error => {
+            typeof failureCallback === 'function' && failureCallback(error)
+        })
     },
     logout(successCallback) {
-        Vue.prototype.$http.post(LOGOUT_API_URL)
-            .then(response => {
-                this.eraseToken()
-
-                typeof successCallback === 'function' && successCallback()
-            })
+        authAPI.logout(response => {
+            this.eraseToken()
+            typeof successCallback === 'function' && successCallback()
+        })
     },
     eraseToken() {
         this.data.jwt = false
         window.localStorage.removeItem(JWTKey)
     },
     userInfo(successCallback) {
-        Vue.prototype.$http.get(GET_USER_INFO_API_URL)
-            .then(response => {
-                typeof successCallback === 'function' && successCallback(response.data)
-            })
+        authAPI.userInfo(response => {
+            typeof successCallback === 'function' && successCallback(response.data)
+        })
     },
     checkStatus(successCallback) {
-        Vue.prototype.$http.post(CHECK_STATUS_API_URL)
-            .then(response => {
-                typeof successCallback === 'function' && successCallback(response.data)
-            })
+        authAPI.checkStatus(response => {
+            typeof successCallback === 'function' && successCallback(response.data)
+        })
     },
     isAuth() {
         if (this.data.jwt) {
