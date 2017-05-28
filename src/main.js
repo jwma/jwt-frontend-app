@@ -4,6 +4,7 @@ import Axios from 'axios'
 import authService from './service/auth'
 import routes from './router/router'
 import App from './App.vue'
+import store from './store'
 
 // 启用各个组件
 Vue.prototype.$http = Axios
@@ -69,6 +70,7 @@ authService.checkStatus()
 
 new Vue({
   el: '#app',
+  store,
   router,
   render: h => h(App)
 })

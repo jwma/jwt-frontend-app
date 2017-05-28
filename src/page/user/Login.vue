@@ -33,9 +33,9 @@ export default {
                 username: '',
                 password: ''
             },
-            errorMsg: '',
+            expiredTips: 0,
             loading: false,
-            expiredTips: 0
+            errorMsg: ''
         }
     },
     beforeRouteEnter(to, from, next) {
@@ -58,18 +58,17 @@ export default {
             }
 
             this.loading = true
-            authService.login(this.form, ({ code, msg }) => {
+            this.$store.dispatch('login', this.form).then(code => {
                 this.loading = false
+                this.errorMsg = false
 
-                if (code === 20000) {
-                    this.errorMsg = ''
-                    const redirect = this.$route.query.redirect == '/login' ? '/' : this.$route.query.redirect
-                    const toPath = redirect || this.fromPath
+                const redirect = this.$route.query.redirect == '/login' ? '/' : this.$route.query.redirect
+                const toPath = redirect || this.fromPath
 
-                    this.$router.push({ path: toPath })
-                } else {
-                    this.errorMsg = msg
-                }
+                this.$router.push({ path: toPath })
+            }).catch(({ msg }) => {
+                this.loading = false
+                this.errorMsg = msg
             })
         }
     }
