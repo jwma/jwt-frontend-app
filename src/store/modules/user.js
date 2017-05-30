@@ -42,6 +42,14 @@ const actions = {
             })
         })
     },
+    logout({ commit, state }) {
+        return new Promise((reslove, reject) => {
+            authAPI.logout(response => {
+                commit(types.ERASE_TOKEN)
+                reslove()
+            })
+        })
+    },
     checkStatus({ commit, state }) {
 
         return new Promise((resolve, reject) => {

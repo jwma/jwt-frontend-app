@@ -28,7 +28,6 @@ export default {
     name: 'Login',
     data() {
         return {
-            fromPath: '',
             form: {
                 username: '',
                 password: ''
@@ -64,7 +63,7 @@ export default {
                 this.errorMsg = false
 
                 const redirect = this.$route.query.redirect == '/login' ? '/' : this.$route.query.redirect
-                const toPath = redirect || this.fromPath
+                const toPath = redirect || '/'
 
                 this.$router.push({ path: toPath })
             }).catch(({ msg }) => {

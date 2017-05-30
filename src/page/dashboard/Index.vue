@@ -25,7 +25,7 @@ export default {
             })
         },
         logout() {
-            authService.logout(_ => {
+            this.$store.dispatch('logout').then(_ => {
                 this.$router.push({ path: '/login' })
             })
         }
