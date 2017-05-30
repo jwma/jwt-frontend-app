@@ -1,6 +1,6 @@
-# Vue-JWT
+# Vue-JWT demo app
 
-> Vue + VueRouter + Axios实现一套 JWT 用户身份验证的前端应用
+> Vue + VueRouter + Vuex + Axios实现一套 JWT 用户身份验证的前端应用
 
 ## 构建
 
