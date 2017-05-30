@@ -3,7 +3,8 @@ import { JWT_KEY } from '../../constants'
 import * as types from '../mutation-types'
 
 const state = {
-    jwt: null
+    jwt: null,
+    username: ''
 }
 
 const getters = {
@@ -14,6 +15,7 @@ const getters = {
 
         return window.localStorage.getItem(JWT_KEY)
     },
+    username: state => state.username,
     isAuthored: (state, getters) => {
         return !!getters.jwt
     }
@@ -27,8 +29,8 @@ const actions = {
                 const { code, msg } = response.data
 
                 if (code === 20000) {
-                    const { token } = response.data
-                    commit(types.LOGIN_SUCCESS)
+                    const { token, username } = response.data
+                    commit(types.LOGIN_SUCCESS, username)
                     commit(types.SET_JWT, token)
 
                     resolve(code)
@@ -62,7 +64,8 @@ const actions = {
 }
 
 const mutations = {
-    [types.LOGIN_SUCCESS](state) {
+    [types.LOGIN_SUCCESS](state, username) {
+        state.username = username
     },
     [types.SET_JWT](state, token) {
         state.jwt = token
