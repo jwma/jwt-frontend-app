@@ -11,7 +11,7 @@
     </div>
 </template>
 <script>
-import authService from '../../service/auth.js'
+import authAPI from '../../api/auth'
 
 export default {
     name: 'Dashboard',
@@ -20,8 +20,8 @@ export default {
     },
     methods: {
         getUserInfo() {
-            authService.userInfo(response => {
-                this.userInfo = response.userInfo
+            authAPI.userInfo(response => {
+                this.userInfo = response.data.userInfo
             })
         },
         logout() {
