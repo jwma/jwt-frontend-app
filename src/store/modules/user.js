@@ -1,4 +1,4 @@
-import authAPI from '../../api/auth.js'
+import authAPI from '../../api/auth'
 import { JWT_KEY } from '../../constants'
 import * as types from '../mutation-types'
 
